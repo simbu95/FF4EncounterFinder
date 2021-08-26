@@ -1,0 +1,187 @@
+<!doctype html>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+<style>
+body {
+margin: 20px;
+}
+</style>
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <div class="row">
+        <label for="Max Steps"> Maximum number of Steps: </label>
+        <input type="number" max= 137 name="Max Steps" id="Max Steps" data-bind="value: maxSteps" />
+    </div>
+    <div class="row">
+        <label for="Max Encounters"> Maximum number of Encounters: </label>
+        <input type="number" max= 16 name="Max Encounters" id="Max Encounters" data-bind="value: maxEnc" />
+    </div>
+    <div class="row">
+        <label for="StepSeconds"> Seconds per Step: </label>
+        <input type="number" step= 0.1 name="StepSeconds" id="StepSeconds" data-bind="value: secStep" />
+    </div>
+    <div class="row">
+        <label for="EncounterSeconds"> Seconds per Encounter: </label>
+        <input type="number" name="EncounterSeconds" id="EncounterSeconds" data-bind="value: secEnc" />
+    </div>
+    <div class="row">
+        <label for="ResetSeconds"> Seconds per Reset: </label>
+        <input type="number" name="ResetSeconds" id="ResetSeconds" data-bind="value: secReset" />
+    </div>
+    
+    <table>
+        <thead><tr>
+            <th>Location Name</th><th>Encounter Indexes</th><th></th>
+        </tr></thead>
+        <tbody data-bind="foreach: encounter">
+        <tr>
+            <td><input data-bind="value: name" /></td>
+            <td><input type="checkbox" value="1" data-bind="checked: encounterIndex" /> 1
+            <input type="checkbox" value="2" data-bind="checked: encounterIndex" /> 2
+            <input type="checkbox" value="3" data-bind="checked: encounterIndex" /> 3
+            <input type="checkbox" value="4" data-bind="checked: encounterIndex" /> 4
+            <input type="checkbox" value="5" data-bind="checked: encounterIndex" /> 5
+            <input type="checkbox" value="6" data-bind="checked: encounterIndex" /> 6
+            <input type="checkbox" value="7" data-bind="checked: encounterIndex" /> 7
+            <input type="checkbox" value="8" data-bind="checked: encounterIndex" /> 8</td>
+        </tr>    
+        </tbody>
+    </table>
+    <button data-bind="click: addEncounter">Add Another Encounter</button>
+    <button data-bind="click: calculate">Calculate Step Manipulations</button>
+    <h2> Manipulation Data </h2>
+    <div data-bind="foreach: StepData">
+        <p data-bind="text: value"></p>
+    </div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.0/knockout-min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"> </script>
+
+<script>
+
+    //This holds the location name, and Encounter indexes selected using checkboxes
+    function EncounterChance(name, Indexes) {
+        var self = this;
+        self.name = name;
+        self.encounterIndex = ko.observableArray(Indexes);
+    }
+    // Contains all the main junctions of the javascript code
+    function EncountersViewModel() {
+        var self = this;
+        //Knockout obervables, which will be editted by the client, and then used later. 
+        self.maxSteps=ko.observable(50);
+        self.maxEnc=ko.observable(5);
+        self.secStep=ko.observable(1);
+        self.secEnc=ko.observable(5);
+        self.secReset=ko.observable(10);
+        self.StepData=ko.observableArray([{"value": "Data will appear here."}]);
+        self.encounter = ko.observableArray([
+            new EncounterChance("", [])
+        ]);
+        //Functionality for the add encounter button. 
+        self.addEncounter = function() {
+            self.encounter.push(new EncounterChance("", []));
+        }
+        //Functionality for the calculate step manip button. 
+        self.calculate = function() {
+            //Read the encounter data from the included JSON. This could be calculated, but this data is already processed and formatted. Switching with data from another location with allow manips from other locations. 
+            $.getJSON("static/BaronEnc.json", function (data) {
+                //Variables for storing global data. 
+                self.StepData([]);
+                self.WinTime=0;
+                self.TotalResets=0;
+                self.resetTime=0;
+                self.TotalWins=0;
+                //For each step
+                for (x of data.Data) {
+                    //If past the maximum steps, stop. 
+                    if(x.Step>self.maxSteps()){
+                        self.StepData.push({"value": "Max Steps Reached"});
+                        break;
+                    }
+                    //Otherwise, list the step
+                    self.StepData.push({"value": "Step: " + x.Step})
+                    //If there are no encounters on this step, state so. 
+                    if(x.Encounters.length === 0){
+                        self.StepData.push({"value": "No Encounters"});
+                    }
+                    //Otherwise, note how many encounters there are, and then perform a search to determine if the desired encounter can be found. 
+                    else {
+                        self.StepData.push({"value": "" + x.Encounters.length + " Encounters"});
+                        self.EncounterSearch(x.Encounters);
+                    }
+                }
+                //These are resets occuring from hitting the max steps limit
+                extraResets=256 - self.TotalWins - self.TotalResets;
+                //Add the time for walking to max steps and resetting. 
+                self.resetTime += extraResets * (self.maxSteps() * self.secStep() + self.secReset());
+                //Resets are now recorded
+                self.TotalResets += extraResets;
+                //Math... The idea is you have (1-P) chance of getting an encounter, and P chance of resetting... which then follows the same (1-P) and P chance of things happening, and each having a different average time cost. 
+                //This should be a geometric series, and the formula for summing to infinity can be used. 
+                //There are probably duplicate, and un-needed terms in this, but this was what looked good on paper. 
+                AverageResetTime = self.resetTime / self.TotalResets
+                AverageWinTime = self.WinTime / self.TotalWins;
+                C1 = AverageWinTime * self.TotalWins / 256;
+                C2 = C1 + AverageResetTime;
+                P = self.TotalResets / 256
+                G = 1 / (1-P)
+                AverageTotalTime = C1 + (G-1) * C2
+                //Logging all the times if anyone actually looks thru this and wants to debug. 
+                console.log(self.TotalWins);
+                console.log(self.TotalResets);
+                console.log(AverageResetTime);
+                console.log(AverageWinTime);
+                console.log(AverageTotalTime);
+                //Add this calculation to the top of the manip text data. 
+                self.StepData.unshift({"value": "" + self.TotalWins + " Seeds find a battle, with an average time to find a battle being " + AverageTotalTime + " seconds"});
+                
+            })
+        }
+        //Performs a search for the desired encounter across all seeds, and with the defined locations/encounter indexes. 
+        self.EncounterSearch = function(EncounterData){
+            
+            //Performing a search over each encounter number (up to the selected max encounters) in the possible seeds from a given step number. 
+            //This starts at 1 to ignore the first encounter which at this point has already occured. 
+            for(let i=1; i<self.maxEnc(); i++){
+                PossibleGroups=new Set();
+                //For each seed, add the possible group numbers the ith encounter could produce. 
+                for(seed of EncounterData){
+                    PossibleGroups.add(seed.EncounterData[i].GroupNum);
+                }
+                //For Each possible location
+                for(cond of self.encounter()){
+                    //For each potential encounter index in this given set of seeds and i-th encounter.
+                    for(Group of PossibleGroups){
+                        //If a potential encounter index is not available at a given location, continue searching. 
+                        if(!cond.encounterIndex().includes(Group.toString())){
+                            break;
+                        }
+                        //Otherwise, the fight has been found, so print the data, and record the steps, encounter times, etc, and stop searching. 
+                        else{
+                            self.StepData.push({"value": "Encounter " + (i) + " at " + cond.name + " has your desired fight"});
+                            for(seed of EncounterData){
+                                steps=seed.EncounterData[i-1].StepCount;
+                                self.WinTime+=steps*self.secStep()+i*self.secEnc();
+                                self.TotalWins+=1;
+                            }
+                            return;
+                        }
+                    }
+                }
+            }
+            //We have exceeded the maximum search depth, so record the steps to the first encounter, and suggest a reset. 
+            self.StepData.push({"value": "Reset"});
+            steps=seed.EncounterData[0].StepCount;
+            self.resetTime += (steps * self.secStep() + self.secReset()) * EncounterData.length;
+            self.TotalResets += EncounterData.length;
+        }
+    }
+    //This connects the knockout elements to the HTML 
+    ko.applyBindings(new EncountersViewModel());
+</script>
+
+</html>
