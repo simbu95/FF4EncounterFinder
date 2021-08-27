@@ -152,23 +152,27 @@ margin: 20px;
                 for(seed of EncounterData){
                     PossibleGroups.add(seed.EncounterData[i].GroupNum);
                 }
+                Found=true;
                 //For Each possible location
                 for(cond of self.encounter()){
                     //For each potential encounter index in this given set of seeds and i-th encounter.
                     for(Group of PossibleGroups){
                         //If a potential encounter index is not available at a given location, continue searching. 
                         if(!cond.encounterIndex().includes(Group.toString())){
+                            Found=false;
                             break;
                         }
                     }
                     //Otherwise, the fight has been found, so print the data, and record the steps, encounter times, etc, and stop searching. 
-                    self.StepData.push({"value": "Encounter " + (i) + " at " + cond.name + " has your desired fight"});
-                    for(seed of EncounterData){
-                        steps=seed.EncounterData[i-1].StepCount;
-                        self.WinTime+=steps*self.secStep()+i*self.secEnc();
-                        self.TotalWins+=1;
+                    if(found){
+                      self.StepData.push({"value": "Encounter " + (i) + " at " + cond.name + " has your desired fight"});
+                      for(seed of EncounterData){
+                          steps=seed.EncounterData[i-1].StepCount;
+                          self.WinTime+=steps*self.secStep()+i*self.secEnc();
+                          self.TotalWins+=1;
+                      }
+                      return;
                     }
-                    return;
                 }
             }
             //We have exceeded the maximum search depth, so record the steps to the first encounter, and suggest a reset. 
