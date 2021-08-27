@@ -94,13 +94,14 @@ margin: 20px;
             new EncounterChance("", [])
         ]);
         self.commonEncountersOptions=ko.observableArray([]);
+        self.selectedEncounter=ko.observable("");
         $.getJSON("static/CommonEncounters.json", function (data) {
             //Variables for storing global data. 
             self.commonEncounters=data.Data;
             for(Encounter of self.commonEncounters){
               self.commonEncountersOptions.push(Encounter["Encounter Name"]);
             }
-            self.selectedEncounter=ko.observable(self.commonEncountersOptions[0]);
+            self.selectedEncounter(self.commonEncountersOptions[0]);
         });
           
         //Functionality for the add encounter button. 
