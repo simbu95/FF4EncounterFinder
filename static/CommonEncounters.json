@@ -1,0 +1,28 @@
+{
+   "Data":[
+      {
+        "Grind Name": "D. Machin",
+        "Encounters":[
+          {
+            "Location Name": "Save Room",
+            "Indexes": [2]
+          },
+          {
+            "Location Name": "Elements Room",
+            "Indexes": [4]
+          }
+        ]
+      },
+      {
+        "Grind Name": "Mac Giant",
+        "Encounters":[
+          {
+            "Location Name": "Giant",
+            "Indexes": [5]
+          }
+        ]
+      }
+   ]
+}
+     
+      
