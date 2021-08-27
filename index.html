@@ -152,9 +152,9 @@ margin: 20px;
                 for(seed of EncounterData){
                     PossibleGroups.add(seed.EncounterData[i].GroupNum);
                 }
-                Found=true;
                 //For Each possible location
                 for(cond of self.encounter()){
+                    Found=true;
                     //For each potential encounter index in this given set of seeds and i-th encounter.
                     for(Group of PossibleGroups){
                         //If a potential encounter index is not available at a given location, continue searching. 
