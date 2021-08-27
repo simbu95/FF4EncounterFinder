@@ -31,6 +31,14 @@ margin: 20px;
         <label for="ResetSeconds"> Seconds per Reset: </label>
         <input type="number" name="ResetSeconds" id="ResetSeconds" data-bind="value: secReset" />
     </div>
+    <div class="row">
+        <label for="Manip Location"> Manipulation Location: </label>
+        <select id="Manip Location" data-bind="options: ManipLocation, value: selectedManipLocation"></select>
+    </div>
+    <div class="row">
+        <label for="EncounterSelect"> Common Encounters: </label>
+        <select id="EncounterSelect" data-bind="options: commonEncountersOptions, value: selectedEncounter"></select>
+    </div>
     
     <table>
         <thead><tr>
@@ -62,6 +70,7 @@ margin: 20px;
 
 <script>
 
+    
     //This holds the location name, and Encounter indexes selected using checkboxes
     function EncounterChance(name, Indexes) {
         var self = this;
@@ -77,18 +86,57 @@ margin: 20px;
         self.secStep=ko.observable(1);
         self.secEnc=ko.observable(5);
         self.secReset=ko.observable(10);
+        self.ManipLocation = ko.observableArray(["Baron/7%", "Mysidia/8%", "Giant/9%","Fabul/10%"]);
+        self.selectedManipLocation = ko.observable("Baron/7%");
         self.StepData=ko.observableArray([{"value": "Data will appear here."}]);
         self.encounter = ko.observableArray([
             new EncounterChance("", [])
         ]);
+      
+        $.getJSON("static/CommonEncounters.json", function (data) {
+            //Variables for storing global data. 
+            self.commonEncounters=data.Data;
+            self.commonEncountersOptions=ko.observableArray();
+            for(Encounter of self.commonEncounters){
+              self.commonEncountersOptions.push(Encounter["Encounter Name"]);
+            }
+            self.selectedEncounter=ko.observable(self.commonEncountersOptions[0]);
+        }
+          
         //Functionality for the add encounter button. 
         self.addEncounter = function() {
             self.encounter.push(new EncounterChance("", []));
         }
+        //Functionality for the load encounter button. 
+        self.loadEncounter = function() {
+            self.encounter([])
+            for(Encounter of self.commonEncounters){
+              if(Encounter["Encounter Name"] === self.SelectedEncounter()){
+                for(Loc of Encounter["Encounters"]){
+                  self.encounter.push(new EncounterChance(Loc["Location Name"], Loc["Indexes"]));
+              }
+            }
+        }
         //Functionality for the calculate step manip button. 
         self.calculate = function() {
+            switch (self.selectedManipLocation()) {
+              case "Baron/7%":
+                fs="static/BaronEnc.json";
+                break;
+              case "Mysidia/8%":
+                fs="static/MysidiaEnc.json";
+                break;
+              case "Giant/9%":
+                fs="static/GiantEnc.json";
+                break;
+              case "Fabul/10%":
+                fs="static/FabulEnc.json";
+                break;
+              default:
+                console.log("something is wrong");
+            }
             //Read the encounter data from the included JSON. This could be calculated, but this data is already processed and formatted. Switching with data from another location with allow manips from other locations. 
-            $.getJSON("static/BaronEnc.json", function (data) {
+            $.getJSON(fs, function (data) {
                 //Variables for storing global data. 
                 self.StepData([]);
                 self.WinTime=0;
