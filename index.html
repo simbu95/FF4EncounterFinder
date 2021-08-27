@@ -38,6 +38,7 @@ margin: 20px;
     <div class="row">
         <label for="EncounterSelect"> Common Encounters: </label>
         <select id="EncounterSelect" data-bind="options: commonEncountersOptions, value: selectedEncounter"></select>
+        <button data-bind="click: loadEncounter">Load Encounter</button>
     </div>
     
     <table>
