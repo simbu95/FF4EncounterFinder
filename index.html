@@ -93,11 +93,10 @@ margin: 20px;
         self.encounter = ko.observableArray([
             new EncounterChance("", [])
         ]);
-      
+        self.commonEncountersOptions=ko.observableArray([]);
         $.getJSON("static/CommonEncounters.json", function (data) {
             //Variables for storing global data. 
             self.commonEncounters=data.Data;
-            self.commonEncountersOptions=[];
             for(Encounter of self.commonEncounters){
               self.commonEncountersOptions.push(Encounter["Encounter Name"]);
             }
