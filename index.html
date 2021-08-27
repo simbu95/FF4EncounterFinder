@@ -102,12 +102,12 @@ margin: 20px;
               self.commonEncountersOptions.push(Encounter["Encounter Name"]);
             }
             self.selectedEncounter=ko.observable(self.commonEncountersOptions[0]);
-        })
+        });
           
         //Functionality for the add encounter button. 
         self.addEncounter = function() {
             self.encounter.push(new EncounterChance("", []));
-        }
+        };
         //Functionality for the load encounter button. 
         self.loadEncounter = function() {
             self.encounter([])
@@ -115,9 +115,10 @@ margin: 20px;
               if(Encounter["Encounter Name"] === self.SelectedEncounter()){
                 for(Loc of Encounter["Encounters"]){
                   self.encounter.push(new EncounterChance(Loc["Location Name"], Loc["Indexes"]));
+                }
               }
             }
-        }
+        };
         //Functionality for the calculate step manip button. 
         self.calculate = function() {
             switch (self.selectedManipLocation()) {
