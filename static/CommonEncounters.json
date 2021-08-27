@@ -1,7 +1,7 @@
 {
    "Data":[
       {
-        "Grind Name": "D. Machin",
+        "Encounter Name": "D. Machin",
         "Encounters":[
           {
             "Location Name": "Save Room",
@@ -14,7 +14,7 @@
         ]
       },
       {
-        "Grind Name": "Mac Giant",
+        "Encounter Name": "Mac Giant",
         "Encounters":[
           {
             "Location Name": "Giant",
