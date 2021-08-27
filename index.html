@@ -160,17 +160,15 @@ margin: 20px;
                         if(!cond.encounterIndex().includes(Group.toString())){
                             break;
                         }
-                        //Otherwise, the fight has been found, so print the data, and record the steps, encounter times, etc, and stop searching. 
-                        else{
-                            self.StepData.push({"value": "Encounter " + (i) + " at " + cond.name + " has your desired fight"});
-                            for(seed of EncounterData){
-                                steps=seed.EncounterData[i-1].StepCount;
-                                self.WinTime+=steps*self.secStep()+i*self.secEnc();
-                                self.TotalWins+=1;
-                            }
-                            return;
-                        }
                     }
+                    //Otherwise, the fight has been found, so print the data, and record the steps, encounter times, etc, and stop searching. 
+                    self.StepData.push({"value": "Encounter " + (i) + " at " + cond.name + " has your desired fight"});
+                    for(seed of EncounterData){
+                        steps=seed.EncounterData[i-1].StepCount;
+                        self.WinTime+=steps*self.secStep()+i*self.secEnc();
+                        self.TotalWins+=1;
+                    }
+                    return;
                 }
             }
             //We have exceeded the maximum search depth, so record the steps to the first encounter, and suggest a reset. 
