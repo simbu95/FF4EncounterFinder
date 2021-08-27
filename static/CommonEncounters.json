@@ -5,11 +5,11 @@
         "Encounters":[
           {
             "Location Name": "Save Room",
-            "Indexes": [2]
+            "Indexes": ["2"]
           },
           {
             "Location Name": "Elements Room",
-            "Indexes": [4]
+            "Indexes": ["4"]
           }
         ]
       },
@@ -18,7 +18,7 @@
         "Encounters":[
           {
             "Location Name": "Giant",
-            "Indexes": [5]
+            "Indexes": ["5"]
           }
         ]
       }
