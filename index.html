@@ -164,7 +164,7 @@ margin: 20px;
                         }
                     }
                     //Otherwise, the fight has been found, so print the data, and record the steps, encounter times, etc, and stop searching. 
-                    if(found){
+                    if(Found){
                       self.StepData.push({"value": "Encounter " + (i) + " at " + cond.name + " has your desired fight"});
                       for(seed of EncounterData){
                           steps=seed.EncounterData[i-1].StepCount;
