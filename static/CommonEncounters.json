@@ -22,7 +22,99 @@
           }
         ]
       }
-   ]
+   ],
+   "Formation":{
+      "Baron": [
+         {
+         "Encounter Form": "Imp x3",
+         "Indexes": [1]
+         },{
+         "Encounter Form": "FloatEye x2",
+         "Indexes": [2]
+         },{
+         "Encounter Form": "Eagle x2, FloatEye x1",
+         "Indexes": [3]
+         },{
+         "Encounter Form": "Imp x3, Sword Rat x1",
+         "Indexes": [4,7]
+         },{
+         "Encounter Form": "Eagle x3",
+         "Indexes": [5]
+         },{
+         "Encounter Form": "Imp x4",
+         "Indexes": [6]
+         },{
+         "Encounter Form": "Imp x6",
+         "Indexes": [8]
+        }],
+      "Mysidia": [
+         {
+         "Encounter Form": "Raven x1",
+         "Indexes": [1,5]
+         },{
+         "Encounter Form": "SwordRat x2, Imp x2, TinyMage x2",
+         "Indexes": [2]
+         },{
+         "Encounter Form": "Imp Cap. x3, Needler x1",
+         "Indexes": [3]
+         },{
+         "Encounter Form": "Imp Cap. x4, Imp x2",
+         "Indexes": [4]
+         },{
+         "Encounter Form": "Imp Cap. x4, Imp x2",
+         "Indexes": [6]
+         },{
+         "Encounter Form": "Raven x1, Cocktric x3",
+         "Indexes": [7, 8]
+         }],
+      "Fabul": [
+         {
+         "Encounter Form": "Imp Cap. x3, Needler  x1",
+         "Indexes": [1]
+         },{
+         "Encounter Form": "Imp Cap. x3, Needler  x3",
+         "Indexes": [2]
+         },{
+         "Encounter Form": "Imp Cap. x4, Imp x2",
+         "Indexes": [3]
+         },{
+         "Encounter Form": "Cocktric x3",
+         "Indexes": [4]
+         },{
+         "Encounter Form": "Gargoyle x1, Cocktric x2",
+         "Indexes": [5]
+         },{
+         "Encounter Form": "GrayBomb x2, Bomb x2",
+         "Indexes": [6]
+         },{
+         "Encounter Form": "SwordRat x3, Needler x3",
+         "Indexes": [7,8]
+        },],
+      "Giant": [
+         {
+         "Encounter Form": "Searcher x1, Beamer x2",
+         "Indexes": [1,2]
+         },{
+         "Encounter Form": "Horseman x1, Machine x2",
+         "Indexes": [3]
+         },{
+         "Encounter Form": "Mac Giant x1, Machine x1, Beamer x1",
+         "Indexes": [4]
+         },{
+         "Encounter Form": "Mac Giant x1",
+         "Indexes": [5]
+         },{
+         "Encounter Form": "Mac Giant x1, Horseman x1, Beamer x1",
+         "Indexes": [6]
+         },{
+         "Encounter Form": "D.Machin x1",
+         "Indexes": [7]
+         },{
+         "Encounter Form": "MacGiant x2",
+         "Indexes": [8]
+        },]
+   }
+      
 }
      
       
