@@ -112,7 +112,7 @@ margin: 20px;
         self.loadEncounter = function() {
             self.encounter([])
             for(Encounter of self.commonEncounters){
-              if(Encounter["Encounter Name"] === self.SelectedEncounter()){
+              if(Encounter["Encounter Name"] === self.selectedEncounter()){
                 for(Loc of Encounter["Encounters"]){
                   self.encounter.push(new EncounterChance(Loc["Location Name"], Loc["Indexes"]));
                 }
