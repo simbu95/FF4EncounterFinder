@@ -30,12 +30,15 @@ margin: 20px;
     <div class="row">
         <label for="ResetSeconds"> Seconds per Reset: </label>
         <input type="number" name="ResetSeconds" id="ResetSeconds" data-bind="value: secReset" />
+    </div>firstEnc
+    <div class="row">
+        <label for="firstEncounter"> Include the first encounter: </label>
+        <input type="checkbox" id="firstEncounter" data-bind="checked: firstEnc" />
     </div>
     <div class="row">
         <label for="Formation"> Enable Formation data: </label>
         <input type="checkbox" id="Formation" data-bind="checked: formationData" />
-    </div>
-            
+  </div>
     <div class="row">
         <label for="Manip Location"> Manipulation Location: </label>
         <select id="Manip Location" data-bind="options: ManipLocation, value: selectedManipLocation"></select>
@@ -92,6 +95,7 @@ margin: 20px;
         self.secStep=ko.observable(1);
         self.secEnc=ko.observable(5);
         self.secReset=ko.observable(10);
+        self.firstEnc=ko.observable(false);
         self.formationData=ko.observable(false);
         self.ManipLocation = ko.observableArray(["Baron/7%", "Mysidia/8%", "Giant/9%","Fabul/10%"]);
         self.selectedManipLocation = ko.observable("Baron/7%");
@@ -235,7 +239,8 @@ margin: 20px;
             
             //Performing a search over each encounter number (up to the selected max encounters) in the possible seeds from a given step number. 
             //This starts at 1 to ignore the first encounter which at this point has already occured. 
-            for(let i=1; i<self.maxEnc(); i++){
+            if(firstEnc())
+            for(let i=firstEnc() ? 0 : 1; i<self.maxEnc(); i++){
                 PossibleGroups=new Set();
                 //For each seed, add the possible group numbers the ith encounter could produce. 
                 for(seed of EncounterData){
