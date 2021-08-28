@@ -210,7 +210,7 @@ margin: 20px;
           for(form of self.FData[loc]){
             EncounterArray=[]
             for(seed of EncounterData){
-              if(form.Indexes.includes(seed.EncounterData[i].GroupNum)){
+              if(form.Indexes.includes(seed.EncounterData[0].GroupNum)){
                 EncounterArray.push(seed);
               }
             }
