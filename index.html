@@ -179,7 +179,7 @@ margin: 20px;
                 //These are resets occuring from hitting the max steps limit
                 extraResets=256 - self.TotalWins - self.TotalResets;
                 //Add the time for walking to max steps and resetting. 
-                self.resetTime += extraResets * (parseFloat((self.maxSteps()) * parseFloat(self.secStep()) + parseFloat(self.secReset()));
+                self.resetTime += extraResets * (parseFloat(self.maxSteps()) * parseFloat(self.secStep()) + parseFloat(self.secReset()));
                 //Resets are now recorded
                 self.TotalResets += extraResets;
                 //Math... The idea is you have (1-P) chance of getting an encounter, and P chance of resetting... which then follows the same (1-P) and P chance of things happening, and each having a different average time cost. 
