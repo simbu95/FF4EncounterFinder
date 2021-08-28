@@ -32,6 +32,11 @@ margin: 20px;
         <input type="number" name="ResetSeconds" id="ResetSeconds" data-bind="value: secReset" />
     </div>
     <div class="row">
+        <label for="Formation"> Enable Formation data: </label>
+        <input type="checkbox" id="Formation" data-bind="checked: formationData" />
+    </div>
+            
+    <div class="row">
         <label for="Manip Location"> Manipulation Location: </label>
         <select id="Manip Location" data-bind="options: ManipLocation, value: selectedManipLocation"></select>
     </div>
@@ -87,6 +92,7 @@ margin: 20px;
         self.secStep=ko.observable(1);
         self.secEnc=ko.observable(5);
         self.secReset=ko.observable(10);
+        self.formationData=ko.observable(false);
         self.ManipLocation = ko.observableArray(["Baron/7%", "Mysidia/8%", "Giant/9%","Fabul/10%"]);
         self.selectedManipLocation = ko.observable("Baron/7%");
         self.StepData=ko.observableArray([{"value": "Data will appear here."}]);
@@ -102,6 +108,7 @@ margin: 20px;
               self.commonEncountersOptions.push(Encounter["Encounter Name"]);
             }
             self.selectedEncounter(self.commonEncountersOptions[0]);
+            self.FData=data.Formation;
         });
           
         //Functionality for the add encounter button. 
@@ -160,8 +167,13 @@ margin: 20px;
                     }
                     //Otherwise, note how many encounters there are, and then perform a search to determine if the desired encounter can be found. 
                     else {
-                        self.StepData.push({"value": "" + x.Encounters.length + " Encounters"});
-                        self.EncounterSearch(x.Encounters);
+                        if(self.formationData()){
+                          self.FormationSearch(x.Encounters);
+                        }
+                        else{
+                          self.StepData.push({"value": "" + x.Encounters.length + " Encounters"});
+                          self.EncounterSearch(x.Encounters);
+                        }
                     }
                 }
                 //These are resets occuring from hitting the max steps limit
@@ -191,6 +203,32 @@ margin: 20px;
                 
             })
         }
+      
+        //Groups based  on formation data, then searchs for desired encounter. 
+        self.FormationSearch = function(EncounterData){
+          loc=self.selectedManipLocation().split("/")[0];
+          for(form of self.FData[loc]){
+            EncounterArray=[]
+            for(seed of EncounterData){
+              if(form.Indexes.includes(seed.EncounterData[i].GroupNum)){
+                EncounterArray.push(seed);
+              }
+            }
+            if(EncounterArray.length === 0){
+              continue;
+            }
+            else{
+              if(EncounterArray.length != EncounterData.length){
+                self.StepData.push({"value": "" + EncounterArray.length + " Encounters with formation " + form["Encounter Form"]});
+                self.EncounterSearch(EncounterArray);
+              }
+              else{
+                self.StepData.push({"value": "" + x.Encounters.length + " Encounters"});
+                self.EncounterSearch(EncounterArray);
+              }
+            }
+        }
+          
         //Performs a search for the desired encounter across all seeds, and with the defined locations/encounter indexes. 
         self.EncounterSearch = function(EncounterData){
             
