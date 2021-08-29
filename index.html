@@ -261,7 +261,7 @@ margin: 20px;
                     if(Found){
                       self.StepData.push({"value": "Encounter " + (i) + " at " + cond.name + " has your desired fight"});
                       for(seed of EncounterData){
-                          steps=seed.EncounterData[self.firstEnc() ? 0 : i].StepCount;
+                          steps=seed.EncounterData[i === 0 ? 0 : i-1].StepCount;
                           self.WinTime+=steps*parseFloat(self.secStep())+i*parseFloat(self.secEnc());
                           self.TotalWins+=1;
                       }
