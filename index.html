@@ -248,6 +248,9 @@ margin: 20px;
                 }
                 //For Each possible location
                 for(cond of self.encounter()){
+                    if( i === 0 && seed.EncounterData[0].StepCount < 15 && cond != self.encounter()[0]){
+                      break;
+                    }
                     Found=true;
                     //For each potential encounter index in this given set of seeds and i-th encounter.
                     for(Group of PossibleGroups){
