@@ -240,7 +240,7 @@ margin: 20px;
             //Performing a search over each encounter number (up to the selected max encounters) in the possible seeds from a given step number. 
             //This starts at 1 to ignore the first encounter which at this point has already occured. 
             
-            for(let i=self.firstEnc() ? 0 : 1; i<self.maxEnc(); i++){
+            for(let i=self.firstEnc() ? 0 : 1; i < parseFloat(self.maxEnc()); i++){
                 PossibleGroups=new Set();
                 //For each seed, add the possible group numbers the ith encounter could produce. 
                 for(seed of EncounterData){
